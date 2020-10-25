@@ -248,15 +248,18 @@ namespace EnderIce2.SDRSharpPlugin
                         {
                             try
                             {
+                                string space_for_listen_list = " | ";
+                                if (!Utils.GetBooleanSetting("EnableRPCInvite", false))
+                                    space_for_listen_list = "";
                                 LogWriter.WriteToFile($"Frequency: {_control.Frequency}");
                                 LogWriter.WriteToFile($"RdsRadioText: {_control.RdsRadioText}");
                                 LogWriter.WriteToFile($"RdsProgramService: {_control.RdsProgramService}");
                                 LogWriter.WriteToFile("Setting presence...");
                                 presence.Details = $"Frequency: {string.Format("{0:#,0,,0 Hz}", _control.Frequency)}";
                                 if (string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
-                                    presence.State = $"RDS: unknown | ";
+                                    presence.State = $"RDS: unknown{space_for_listen_list}";
                                 else
-                                    presence.State = $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText} | ";
+                                    presence.State = $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}{space_for_listen_list}";
                             }
                             catch (Exception ex)
                             {
