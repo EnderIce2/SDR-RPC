@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using SDRSharp.Radio;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SDRSharp.Radio;
-using System.Security.Policy;
-using System.Media;
 
 namespace EnderIce2.SDRSharpPlugin
 {
@@ -41,6 +33,10 @@ namespace EnderIce2.SDRSharpPlugin
                 checkBox2.Checked = true;
             else
                 checkBox2.Checked = false;
+            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                checkBox3.Checked = true;
+            else
+                checkBox3.Checked = false;
             LogWriter.WriteToFile("SettingsPanel loaded");
         }
 
@@ -52,17 +48,17 @@ namespace EnderIce2.SDRSharpPlugin
             //Utils.GetBooleanSetting("EnableRPC");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDRSharpRPC");
+            System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC");
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
             Utils.SaveSetting("LogRPC", checkBox2.Checked);
         }
 
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
                 e.Handled = true;
@@ -70,7 +66,7 @@ namespace EnderIce2.SDRSharpPlugin
                 e.Handled = true;
         }
 
-        private async void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private async void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && textBox1.Text.Replace(" ", "").Length == 18)
             {
@@ -81,6 +77,13 @@ namespace EnderIce2.SDRSharpPlugin
                 textBox1.Text = Utils.GetStringSetting("ClientID");
                 label1.Text = "Saved.";
             }
+        }
+
+        private void CheckBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            Utils.SaveSetting("EnableRPCInvite", checkBox3.Checked);
+            label1.Text = "Restart required";
+            LogWriter.WriteToFile($"checkbox on SettingsPanel clicked {checkBox3.Checked}");
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnderIce2.SDRSharpPlugin
 {
@@ -21,17 +17,13 @@ namespace EnderIce2.SDRSharpPlugin
             string filepath = AppDomain.CurrentDomain.BaseDirectory + "\\RPCLogs\\DiscordRPCLog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".log";
             if (!File.Exists(filepath))
             {
-                using (StreamWriter sw = File.CreateText(filepath))
-                {
-                    sw.WriteLine($"[{DateTime.Now}] {Message}");
-                }
+                using StreamWriter sw = File.CreateText(filepath);
+                sw.WriteLine($"[{DateTime.Now}] {Message}");
             }
             else
             {
-                using (StreamWriter sw = File.AppendText(filepath))
-                {
-                    sw.WriteLine($"[{DateTime.Now}] {Message}");
-                }
+                using StreamWriter sw = File.AppendText(filepath);
+                sw.WriteLine($"[{DateTime.Now}] {Message}");
             }
         }
     }

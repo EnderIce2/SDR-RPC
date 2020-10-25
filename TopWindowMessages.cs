@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using DiscordRPC;
+using DiscordRPC.Message;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DiscordRPC.Message;
-using DiscordRPC;
 
 namespace EnderIce2.SDRSharpPlugin
 {

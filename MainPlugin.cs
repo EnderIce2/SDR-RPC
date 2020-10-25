@@ -1,18 +1,12 @@
-﻿using System;
-using System.Windows.Forms;
-using System.ComponentModel;
+﻿using DiscordRPC;
+using DiscordRPC.Logging;
+using DiscordRPC.Message;
 using SDRSharp.Common;
 using SDRSharp.Radio;
-using SDRSharp.PanView;
-using DiscordRPC.Logging;
-using DiscordRPC;
-using System.Text;
-using System.Threading.Tasks;
-using DiscordRPC.Message;
-using DiscordRPC.IO;
-using System.IO;
+using System;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EnderIce2.SDRSharpPlugin
 {
@@ -20,14 +14,18 @@ namespace EnderIce2.SDRSharpPlugin
     {
         private const string _displayName = "Discord RPC";
         private SettingsPanel _controlPanel;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private static LogLevel logLevel = LogLevel.Trace;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private static int discordPipe = -1;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         bool RPCalreadyLoaded = false;
         private ISharpControl _control;
         bool playedBefore = false;
         private IConfigurationPanelProvider configurationPanelProvider;
         private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         public TopWindowMessages windowMessages;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private RichPresence presence = new RichPresence()
         {
             Details = "Loading...",
@@ -38,16 +36,6 @@ namespace EnderIce2.SDRSharpPlugin
                 LargeImageText = "SDRSharp",
                 SmallImageKey = "image_small",
                 SmallImageText = $"SDR# RPC plugin v{Assembly.GetEntryAssembly().GetName().Version} by EnderIce2"
-            },
-            Secrets = new Secrets()
-            {
-                JoinSecret = "invalid_secret"
-            },
-            Party = new Party()
-            {
-                ID = Secrets.CreateFriendlySecret(new Random()),
-                Size = 1,
-                Max = 100
             }
         };
         private static DiscordRpcClient client;
@@ -69,17 +57,32 @@ namespace EnderIce2.SDRSharpPlugin
             if (Utils.GetBooleanSetting("ShowWelcomePage", true))
                 new WelcomeForm().ShowDialog();
             _controlPanel = new SettingsPanel();
-            windowMessages = new TopWindowMessages();
+            windowMessages = new TopWindowMessages(); // TODO: do something when "EnableRPCInvite" is set to false
             _control = control;
             try
             {
-                _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
+                if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
-            windowMessages.Show();
+            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+            {
+                presence.Secrets = new Secrets()
+                {
+                    JoinSecret = "invalid_secret"
+                };
+                presence.Party = new Party()
+                {
+                    ID = Secrets.CreateFriendlySecret(new Random()),
+                    Size = 1,
+                    Max = 100
+                };
+            }
+            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                windowMessages.Show();
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
                 if (RPCalreadyLoaded)
@@ -114,7 +117,8 @@ namespace EnderIce2.SDRSharpPlugin
                 {
                     Start = DateTime.UtcNow
                 };
-                client.SetSubscription(EventType.Join | EventType.JoinRequest);
+                if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    client.SetSubscription(EventType.Join | EventType.JoinRequest);
                 client.SetPresence(presence);
                 client.Initialize();
                 try
@@ -210,16 +214,19 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
                 while (client != null && isRunning)
                 {
-                    LogWriter.WriteToFile("Setting secret...");
-                    try
+                    if (Utils.GetBooleanSetting("EnableRPCInvite", false))
                     {
-                        string sdr_url = "sdr://" + controllerPanel.Host + ":" + controllerPanel.Port + "/";
-                        LogWriter.WriteToFile(sdr_url);
-                        presence.Secrets.JoinSecret = sdr_url;
-                    }
-                    catch (Exception ex)
-                    {
-                        LogWriter.WriteToFile(ex.ToString());
+                        LogWriter.WriteToFile("Setting secret...");
+                        try
+                        {
+                            string sdr_url = "sdr://" + controllerPanel.Host + ":" + controllerPanel.Port + "/";
+                            LogWriter.WriteToFile(sdr_url);
+                            presence.Secrets.JoinSecret = sdr_url;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogWriter.WriteToFile(ex.ToString());
+                        }
                     }
                     LogWriter.WriteToFile("Waiting 500ms in loop...");
                     await Task.Delay(500);
@@ -262,7 +269,10 @@ namespace EnderIce2.SDRSharpPlugin
                         {
                             client.SetPresence(presence);
                         }
-                        catch (ObjectDisposedException) {; }
+                        catch (ObjectDisposedException ex)
+                        {
+                            LogWriter.WriteToFile($"ObjectDisposedException exception for SetPresence\n{ex}");
+                        }
                         LogWriter.WriteToFile("SetPresence");
                         _controlPanel.ChangeStatus = $"Presence Updated {DateTime.UtcNow}";
                     }

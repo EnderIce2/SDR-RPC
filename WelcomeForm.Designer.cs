@@ -55,7 +55,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "&OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // checkBox1
             // 
@@ -66,7 +66,7 @@
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "Don\'t show me this next time";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // label1
             // 
@@ -95,7 +95,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Support Me";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // WelcomeForm
             // 
