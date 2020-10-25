@@ -36,7 +36,6 @@ namespace EnderIce2.SDRSharpPlugin
         private bool AnswerD = false;
         public async Task<bool> RequestAnswer(DiscordRpcClient client, JoinRequestMessage args)
         {
-            bool tmpansw = false;
             LogWriter.WriteToFile("Incoming RPC request from " + args.User.Username);
             button1.Visible = true;
             button2.Visible = true;
@@ -47,7 +46,7 @@ namespace EnderIce2.SDRSharpPlugin
                 Application.DoEvents();
                 await Task.Delay(200);
             }
-            tmpansw = AnswerA;
+            bool tmpansw = AnswerA;
             LogWriter.WriteToFile($"Client sent an answer. {tmpansw}");
             client.Respond(args, tmpansw);
             AnswerA = false;
