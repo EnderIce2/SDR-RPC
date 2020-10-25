@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{72E8628F-BA39-4915-BF3C-DD48BF477D30}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DiscordRPC</RootNamespace>
+    <AssemblyName>DiscordRPC</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet />
+    <LangVersion>8.0</LangVersion>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet />
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SDRSharp, Version=1.0.0.1765, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\sdrsharp-x86\SDRSharp.exe</HintPath>
+    </Reference>
+    <Reference Include="SDRSharp.Common, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sdrsharp-x86\SDRSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SDRSharp.PanView, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sdrsharp-x86\SDRSharp.PanView.dll</HintPath>
+    </Reference>
+    <Reference Include="SDRSharp.Radio, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sdrsharp-x86\SDRSharp.Radio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DiscordAPI\Configuration.cs" />
+    <Compile Include="DiscordAPI\Converters\EnumSnakeCaseConverter.cs" />
+    <Compile Include="DiscordAPI\Converters\EnumValueAttribute.cs" />
+    <Compile Include="DiscordAPI\DiscordRpcClient.cs" />
+    <Compile Include="DiscordAPI\Events.cs" />
+    <Compile Include="DiscordAPI\EventType.cs" />
+    <Compile Include="DiscordAPI\Exceptions\BadPresenceException.cs" />
+    <Compile Include="DiscordAPI\Exceptions\InvalidConfigurationException.cs" />
+    <Compile Include="DiscordAPI\Exceptions\InvalidPipeException.cs" />
+    <Compile Include="DiscordAPI\Exceptions\StringOutOfRangeException.cs" />
+    <Compile Include="DiscordAPI\Exceptions\UninitializedException.cs" />
+    <Compile Include="DiscordAPI\Helper\BackoffDelay.cs" />
+    <Compile Include="DiscordAPI\Helper\StringTools.cs" />
+    <Compile Include="DiscordAPI\IO\Handshake.cs" />
+    <Compile Include="DiscordAPI\IO\INamedPipeClient.cs" />
+    <Compile Include="DiscordAPI\IO\ManagedNamedPipeClient.cs" />
+    <Compile Include="DiscordAPI\IO\Opcode.cs" />
+    <Compile Include="DiscordAPI\IO\PipeFrame.cs" />
+    <Compile Include="DiscordAPI\Logging\ConsoleLogger.cs" />
+    <Compile Include="DiscordAPI\Logging\FileLogger.cs" />
+    <Compile Include="DiscordAPI\Logging\ILogger.cs" />
+    <Compile Include="DiscordAPI\Logging\LogLevel.cs" />
+    <Compile Include="DiscordAPI\Logging\NullLogger.cs" />
+    <Compile Include="DiscordAPI\Message\CloseMessage.cs" />
+    <Compile Include="DiscordAPI\Message\ConnectionEstablishedMessage.cs" />
+    <Compile Include="DiscordAPI\Message\ConnectionFailedMessage.cs" />
+    <Compile Include="DiscordAPI\Message\ErrorMessage.cs" />
+    <Compile Include="DiscordAPI\Message\IMessage.cs" />
+    <Compile Include="DiscordAPI\Message\JoinMessage.cs" />
+    <Compile Include="DiscordAPI\Message\JoinRequestMessage.cs" />
+    <Compile Include="DiscordAPI\Message\MessageType.cs" />
+    <Compile Include="DiscordAPI\Message\PresenceMessage.cs" />
+    <Compile Include="DiscordAPI\Message\ReadyMessage.cs" />
+    <Compile Include="DiscordAPI\Message\SpectateMessage.cs" />
+    <Compile Include="DiscordAPI\Message\SubscribeMessage.cs" />
+    <Compile Include="DiscordAPI\Message\UnsubscribeMsesage.cs" />
+    <Compile Include="DiscordAPI\Registry\IUriSchemeCreator.cs" />
+    <Compile Include="DiscordAPI\Registry\MacUriSchemeCreator.cs" />
+    <Compile Include="DiscordAPI\Registry\UnixUriSchemeCreator.cs" />
+    <Compile Include="DiscordAPI\Registry\UriScheme.cs" />
+    <Compile Include="DiscordAPI\Registry\WindowsUriSchemeCreator.cs" />
+    <Compile Include="DiscordAPI\RichPresence.cs" />
+    <Compile Include="DiscordAPI\RPC\Commands\CloseCommand.cs" />
+    <Compile Include="DiscordAPI\RPC\Commands\ICommand.cs" />
+    <Compile Include="DiscordAPI\RPC\Commands\PresenceCommand.cs" />
+    <Compile Include="DiscordAPI\RPC\Commands\RespondCommand.cs" />
+    <Compile Include="DiscordAPI\RPC\Commands\SubscribeCommand.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\ClosePayload.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\Command.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\IPayload.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\PayloadArgument.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\PayloadEvent.cs" />
+    <Compile Include="DiscordAPI\RPC\Payload\ServerEvent.cs" />
+    <Compile Include="DiscordAPI\RPC\RpcConnection.cs" />
+    <Compile Include="DiscordAPI\User.cs" />
+    <Compile Include="DiscordAPI\Web\WebRPC.cs" />
+    <Compile Include="LogWriter.cs" />
+    <Compile Include="MainPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel.Designer.cs">
+      <DependentUpon>SettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TopWindowMessages.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TopWindowMessages.Designer.cs">
+      <DependentUpon>TopWindowMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WelcomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WelcomeForm.Designer.cs">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SettingsPanel.resx">
+      <DependentUpon>SettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopWindowMessages.resx">
+      <DependentUpon>TopWindowMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DiscordAPI\LICENSE.txt" />
+    <Content Include="Resgister.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
