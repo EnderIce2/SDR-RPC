@@ -9,33 +9,33 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 
 ---
 
-### Features
-- Enable / Disable
-- Showing frequency, play state and RDS almost in realtime
-- Most of the code is made asynchronous
-- Logging for troubleshooting problems
-- Easy to install
-- Invite feature (give Spy Server Address or listen using voice chat system) [coming soon]
+### ✨Features
+- 🎛Enable / Disable
+- ✏Showing frequency, play state and RDS almost in realtime
+- 🔌Most of the code is made asynchronous
+- 📖Logging for troubleshooting problems
+- 🔨Easy to install
+- 🎧Invite feature (give Spy Server Address or listen using voice chat system) [coming soon]
 
 ---
 
-### How to install
+### 🎁How to install
 
-Video:
+📽Video:
 
 [![](http://img.youtube.com/vi/Otn-xSn_ioI/0.jpg)](http://www.youtube.com/watch?v=Otn-xSn_ioI "")
 
 ---
 
-### Example
+### 🎫Example
 
-Video:
+📽Video:
 
 [![](http://img.youtube.com/vi/7k02dPqAjBA/0.jpg)](http://www.youtube.com/watch?v=7k02dPqAjBA "")
 
 ---
 
-### Building by yourself
+### 💻Building by yourself
 
 1. You need to download these stuff before compiling:
 - [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
@@ -55,7 +55,7 @@ Video:
 
 ---
 
-### Setting your custom images on RPC
+### 👀Setting your custom images on RPC
 
 1. Go to https://discord.com/developers/applications and create your own application
 2. Name it "SDRSharp" or something similar
@@ -78,7 +78,7 @@ Video:
 
 ---
 
-### TODO List
+### 📕TODO List
 
 - Invite people to get Apy Server Address or connecting via voice chat system to listen and having the ability to change the frequency
 - Change Settings Panel to WPF User Control
