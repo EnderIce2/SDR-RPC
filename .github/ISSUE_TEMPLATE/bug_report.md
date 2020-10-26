@@ -28,5 +28,8 @@ If applicable, add screenshots to help explain your problem.
  - Plugin Version [e.g. 1.2]
  - SDR# Version [e.g. revision 1770 4698f0a]
 
+**Plugin Log**
+A copy of \RPCLogs\DiscordRPCLog_XX.XX.XXXX.log on https://pastebin.com or other copy-paste website.
+
 **Additional context**
 Add any other context about the problem here.
