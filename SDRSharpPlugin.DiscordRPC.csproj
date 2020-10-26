@@ -36,6 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet />
     <LangVersion>8.0</LangVersion>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -164,7 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DiscordAPI\LICENSE.txt" />
-    <Content Include="Resgister.txt" />
+    <Content Include="Resgister.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
