@@ -22,6 +22,7 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 ### How to install
 
 Video:
+
 [![](http://img.youtube.com/vi/Otn-xSn_ioI/0.jpg)](http://www.youtube.com/watch?v=Otn-xSn_ioI "")
 
 ---
@@ -29,6 +30,7 @@ Video:
 ### Example
 
 Video:
+
 [![](http://img.youtube.com/vi/7k02dPqAjBA/0.jpg)](http://www.youtube.com/watch?v=7k02dPqAjBA "")
 
 ---
@@ -45,7 +47,9 @@ Video:
     - SDRSharp.Radio.dll
 
 2. Click "Code" and select "Open with Visual Studio" or "Download ZIP"
+
 ![Captură de ecran 2020-10-26 025111.png](https://raw.githubusercontent.com/EnderIce2/SDR-RPC/master/.github/MEDIA/Captur%C4%83%20de%20ecran%202020-10-26%20025111.png)
+
 3. If you downloaded as ZIP, unzip the archive and double click on "SDRSharpPlugin.DiscordRPC.sln"
 4. Build it and move files to SDR# location (if the compile fails try copying Reference files into /bin/Debug or /bin/Release folder)
 
@@ -55,13 +59,21 @@ Video:
 
 1. Go to https://discord.com/developers/applications and create your own application
 2. Name it "SDRSharp" or something similar
+
 ![Captură de ecran 2020-10-26 023639.png](https://raw.githubusercontent.com/EnderIce2/SDR-RPC/master/.github/MEDIA/Captur%C4%83%20de%20ecran%202020-10-26%20023639.png)
+
 3. Go to Rich Presence > Rich Presence Assets and add your own images with these names:
+
 ![Captură de ecran 2020-10-26 023706.png](https://raw.githubusercontent.com/EnderIce2/SDR-RPC/master/.github/MEDIA/Captur%C4%83%20de%20ecran%202020-10-26%20023706.png)
+
 4. Go back to General Information and copy Client ID
+
 ![Captură de ecran 2020-10-26 023915.png](https://raw.githubusercontent.com/EnderIce2/SDR-RPC/master/.github/MEDIA/Captur%C4%83%20de%20ecran%202020-10-26%20023915.png)
+
 5. Paste the Client ID you copied earlier in plugin textbox from SDRSharp and press the ENTER key
+
 ![Captură de ecran 2020-10-26 024024.png](https://raw.githubusercontent.com/EnderIce2/SDR-RPC/master/.github/MEDIA/Captur%C4%83%20de%20ecran%202020-10-26%20024024.png)
+
 6. Restart the SDRSharp and it should be changed with your custom images
 
 ---
