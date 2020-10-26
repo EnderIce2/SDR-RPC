@@ -165,7 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DiscordAPI\LICENSE.txt" />
-    <Content Include="Resgister.txt">
+    <Content Include="Register.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
