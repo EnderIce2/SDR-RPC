@@ -35,7 +35,7 @@ namespace EnderIce2.SDRSharpPlugin
                 LargeImageKey = "image_large",
                 LargeImageText = "SDRSharp",
                 SmallImageKey = "image_small",
-                SmallImageText = $"SDR# RPC plugin v{Assembly.GetEntryAssembly().GetName().Version} by EnderIce2"
+                SmallImageText = $"SDR-RPC plugin v{Assembly.GetEntryAssembly().GetName().Version} by EnderIce2"
             }
         };
         private static DiscordRpcClient client;
