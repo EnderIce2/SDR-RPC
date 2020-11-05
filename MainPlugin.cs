@@ -14,10 +14,8 @@ namespace EnderIce2.SDRSharpPlugin
     {
         private const string _displayName = "Discord RPC";
         private SettingsPanel _controlPanel;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static LogLevel logLevel = LogLevel.Trace;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static int discordPipe = -1;
+        private const LogLevel logLevel = LogLevel.Trace;
+        private const int discordPipe = -1;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         bool RPCalreadyLoaded = false;
         private ISharpControl _control;
