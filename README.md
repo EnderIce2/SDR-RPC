@@ -2,6 +2,7 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/EnderIce2/SDR-RPC/total)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/EnderIce2/SDR-RPC)
 [![CodeFactor](https://www.codefactor.io/repository/github/enderice2/sdr-rpc/badge?s=6ea1f91b515716a019633ad07f7d3138bc136f22)](https://www.codefactor.io/repository/github/enderice2/sdr-rpc)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/88685ae81b7c4c10bb8e4ceb16ad9bcc)](https://www.codacy.com/gh/EnderIce2/SDR-RPC/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=EnderIce2/SDR-RPC&amp;utm_campaign=Badge_Grade)
 ![Twitter Follow](https://img.shields.io/twitter/follow/enderice22?style=flat)
 # SDR-RPC
 
