@@ -53,7 +53,10 @@ namespace EnderIce2.SDRSharpPlugin
         public void Initialize(ISharpControl control)
         {
             if (Utils.GetBooleanSetting("ShowWelcomePage", true))
+            {
                 new WelcomeForm().ShowDialog();
+            }
+
             _controlPanel = new SettingsPanel();
             windowMessages = new TopWindowMessages(); // TODO: do something when "EnableRPCInvite" is set to false
             _control = control;
@@ -89,15 +92,20 @@ namespace EnderIce2.SDRSharpPlugin
                     return;
                 }
                 if (Utils.GetStringSetting("ClientID").Replace(" ", "").Length != 18)
+                {
                     client = new DiscordRpcClient("765213507321856078", pipe: discordPipe)
                     {
                         Logger = new ConsoleLogger(logLevel, true)
                     };
+                }
                 else
+                {
                     client = new DiscordRpcClient(Utils.GetStringSetting("ClientID"), pipe: discordPipe)
                     {
                         Logger = new ConsoleLogger(logLevel, true)
                     };
+                }
+
                 client.RegisterUriScheme();
                 client.OnRpcMessage += Client_OnRpcMessage;
                 client.OnPresenceUpdate += Client_OnPresenceUpdate;
@@ -110,7 +118,6 @@ namespace EnderIce2.SDRSharpPlugin
                 client.OnUnsubscribe += OnUnsubscribe;
                 client.OnJoin += OnJoin;
                 client.OnJoinRequested += OnJoinRequested;
-                //client.OnSpectate += OnSpectate;
                 presence.Timestamps = new Timestamps()
                 {
                     Start = DateTime.UtcNow
@@ -126,7 +133,7 @@ namespace EnderIce2.SDRSharpPlugin
                 }
                 catch (Exception ex)
                 {
-                    LogWriter.WriteToFile("----> " + ex.ToString());
+                    LogWriter.WriteToFile("----> " + ex);
                     MessageBox.Show($"Cannot get Spy Server Network address\n\nError:\n{ex}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 _ = MainLoop();
@@ -236,7 +243,10 @@ namespace EnderIce2.SDRSharpPlugin
                             playedBefore = true;
                         }
                         else if (!_control.IsPlaying && playedBefore)
+                        {
                             presence.Assets.SmallImageKey = "pause";
+                        }
+
                         if (!playedBefore)
                         {
                             presence.Details = "Frequency: Not playing";
@@ -255,16 +265,20 @@ namespace EnderIce2.SDRSharpPlugin
                                 LogWriter.WriteToFile("Setting presence...");
                                 presence.Details = $"Frequency: {string.Format("{0:#,0,,0 Hz}", _control.Frequency)}";
                                 if (string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
+                                {
                                     presence.State = $"RDS: unknown{space_for_listen_list}";
+                                }
                                 else
+                                {
                                     presence.State = $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}{space_for_listen_list}";
+                                }
                             }
                             catch (Exception ex)
                             {
                                 LogWriter.WriteToFile(ex.ToString());
                             }
-                            /*presence.Secrets.JoinSecret = */
-                            //_control.RegisterFrontControl(Gui, PluginPosition.Top);
+                            /* presence.Secrets.JoinSecret = */
+                            // TODO: _control.RegisterFrontControl(Gui, PluginPosition.Top);
                         }
                         try
                         {
@@ -280,7 +294,7 @@ namespace EnderIce2.SDRSharpPlugin
                     else
                     {
                         LogWriter.WriteToFile("Frequency or Radio Text are null!");
-                        await Task.Delay(1000);
+                        await Task.Delay(1000).ConfigureAwait(false);
                     }
                 }
                 if (client == null)

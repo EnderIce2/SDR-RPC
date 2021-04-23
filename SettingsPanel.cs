@@ -26,17 +26,31 @@ namespace EnderIce2.SDRSharpPlugin
             InitializeComponent();
             textBox1.Text = Utils.GetStringSetting("ClientID");
             if (Utils.GetBooleanSetting("EnableRPC", true))
+            {
                 checkBox1.Checked = true;
+            }
             else
+            {
                 checkBox1.Checked = false;
+            }
+
             if (Utils.GetBooleanSetting("LogRPC", false))
+            {
                 checkBox2.Checked = true;
+            }
             else
+            {
                 checkBox2.Checked = false;
+            }
+
             if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+            {
                 checkBox3.Checked = true;
+            }
             else
+            {
                 checkBox3.Checked = false;
+            }
             LogWriter.WriteToFile("SettingsPanel loaded");
         }
 

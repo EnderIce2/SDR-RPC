@@ -25,8 +25,8 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile(value);
             }
         }
-        private bool AnswerA = false;
-        private bool AnswerD = false;
+        private bool AnswerA;
+        private bool AnswerD;
         public async Task<bool> RequestAnswer(DiscordRpcClient client, JoinRequestMessage args)
         {
             LogWriter.WriteToFile("Incoming RPC request from " + args.User.Username);
@@ -54,10 +54,15 @@ namespace EnderIce2.SDRSharpPlugin
         private async Task SetDefaultTextInLabel(bool accepted)
         {
             if (accepted)
+            {
                 ChangeLabel = $"SDR# RPC | Request accepted";
+            }
             else
+            {
                 ChangeLabel = $"SDR# RPC | Request declined";
-            await Task.Delay(5000);
+            }
+
+            await Task.Delay(5000).ConfigureAwait(false);
             ChangeLabel = $"SDR# RPC | Ready";
         }
     }
