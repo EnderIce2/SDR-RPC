@@ -35,7 +35,7 @@ namespace EnderIce2.SDRSharpPlugin
                 SmallImageText = $"SDR-RPC plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version} by EnderIce2" // should show the correct version
             }
         };
-        private static DiscordRpcClient client;
+        private DiscordRpcClient client;
         private bool isRunning = true;
         public string DisplayName
         {
@@ -86,7 +86,10 @@ namespace EnderIce2.SDRSharpPlugin
                 };
             }
             if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+            {
                 windowMessages.Show();
+            }
+
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
                 if (RPCalreadyLoaded)
@@ -304,9 +307,13 @@ namespace EnderIce2.SDRSharpPlugin
                     }
                 }
                 if (client == null)
+                {
                     _controlPanel.ChangeStatus = "Client was null";
+                }
                 else
+                {
                     _controlPanel.ChangeStatus = "Presence stopped";
+                }
             }
             catch (Exception ex)
             {
