@@ -20,9 +20,8 @@ namespace EnderIce2.SDRSharpPlugin
         bool RPCalreadyLoaded = false;
         private ISharpControl _control;
         bool playedBefore = false;
-        private IConfigurationPanelProvider configurationPanelProvider;
         private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
-        public TopWindowMessages windowMessages;
+        private TopWindowMessages windowMessages;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private RichPresence presence = new RichPresence()
         {
@@ -37,7 +36,7 @@ namespace EnderIce2.SDRSharpPlugin
             }
         };
         private static DiscordRpcClient client;
-        private static bool isRunning = true;
+        private bool isRunning = true;
         public string DisplayName
         {
             get { return _displayName; }
@@ -52,6 +51,8 @@ namespace EnderIce2.SDRSharpPlugin
         }
         public void Initialize(ISharpControl control)
         {
+            IConfigurationPanelProvider configurationPanelProvider;
+
             if (Utils.GetBooleanSetting("ShowWelcomePage", true))
             {
                 new WelcomeForm().ShowDialog();
@@ -63,7 +64,9 @@ namespace EnderIce2.SDRSharpPlugin
             try
             {
                 if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                {
                     _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
+                }
             }
             catch (Exception ex)
             {
@@ -139,7 +142,10 @@ namespace EnderIce2.SDRSharpPlugin
                 _ = MainLoop();
             }
             else
+            {
                 _controlPanel.ChangeStatus = "RPC is disabled";
+            }
+
             LogWriter.WriteToFile("EOM Initialize");
         }
         private void Client_OnPresenceUpdate(object sender, PresenceMessage args)
@@ -214,7 +220,7 @@ namespace EnderIce2.SDRSharpPlugin
         {
             try
             {
-                await Task.Delay(2000);
+                await Task.Delay(2000).ConfigureAwait(false);
                 isRunning = true;
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
                 while (client != null && isRunning)

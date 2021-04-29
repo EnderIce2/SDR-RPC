@@ -8,7 +8,10 @@ namespace EnderIce2.SDRSharpPlugin
         public static void WriteToFile(string Message)
         {
             if (!SDRSharp.Radio.Utils.GetBooleanSetting("LogRPC", false))
+            {
                 return;
+            }
+
             string path = AppDomain.CurrentDomain.BaseDirectory + "\\RPCLogs\\";
             if (!Directory.Exists(path))
             {

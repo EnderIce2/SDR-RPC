@@ -37,7 +37,7 @@ namespace EnderIce2.SDRSharpPlugin
             {
                 LogWriter.WriteToFile("waiting...");
                 Application.DoEvents();
-                await Task.Delay(200);
+                await Task.Delay(200).ConfigureAwait(false);
             }
             bool tmpansw = AnswerA;
             LogWriter.WriteToFile($"Client sent an answer. {tmpansw}");

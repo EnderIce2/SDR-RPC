@@ -59,7 +59,7 @@ namespace EnderIce2.SDRSharpPlugin
             Utils.SaveSetting("EnableRPC", checkBox1.Checked);
             label1.Text = "Restart required";
             LogWriter.WriteToFile($"checkbox on SettingsPanel clicked {checkBox1.Checked}");
-            //Utils.GetBooleanSetting("EnableRPC");
+            // TODO: implement Utils.GetBooleanSetting("EnableRPC");
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -75,9 +75,14 @@ namespace EnderIce2.SDRSharpPlugin
         private void TextBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
                 e.Handled = true;
+            }
+
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
                 e.Handled = true;
+            }
         }
 
         private async void TextBox1_KeyDown(object sender, KeyEventArgs e)
@@ -87,7 +92,7 @@ namespace EnderIce2.SDRSharpPlugin
                 Utils.SaveSetting("ClientID", textBox1.Text);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-                await Task.Delay(200);
+                await Task.Delay(200).ConfigureAwait(false);
                 textBox1.Text = Utils.GetStringSetting("ClientID");
                 label1.Text = "Saved.";
             }
