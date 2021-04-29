@@ -59,7 +59,7 @@ namespace EnderIce2.SDRSharpPlugin
             Utils.SaveSetting("EnableRPC", checkBox1.Checked);
             label1.Text = "Restart required";
             LogWriter.WriteToFile($"checkbox on SettingsPanel clicked {checkBox1.Checked}");
-            // TODO: implement Utils.GetBooleanSetting("EnableRPC");
+            /* Utils.GetBooleanSetting("EnableRPC"); */
         }
 
         private void Button1_Click(object sender, EventArgs e)

@@ -37,18 +37,9 @@ namespace EnderIce2.SDRSharpPlugin
         };
         private DiscordRpcClient client;
         private bool isRunning = true;
-        public string DisplayName
-        {
-            get { return _displayName; }
-        }
-        public bool HasGui
-        {
-            get { return true; }
-        }
-        public UserControl Gui
-        {
-            get { return _controlPanel; }
-        }
+        public string DisplayName => _displayName;
+        public bool HasGui => true;
+        public UserControl Gui => _controlPanel;
         public void Initialize(ISharpControl control)
         {
             IConfigurationPanelProvider configurationPanelProvider;
@@ -72,6 +63,7 @@ namespace EnderIce2.SDRSharpPlugin
             {
                 MessageBox.Show(ex.ToString());
             }
+
             if (Utils.GetBooleanSetting("EnableRPCInvite", false))
             {
                 presence.Secrets = new Secrets()
@@ -85,6 +77,7 @@ namespace EnderIce2.SDRSharpPlugin
                     Max = 100
                 };
             }
+
             if (Utils.GetBooleanSetting("EnableRPCInvite", false))
             {
                 windowMessages.Show();
@@ -128,8 +121,12 @@ namespace EnderIce2.SDRSharpPlugin
                 {
                     Start = DateTime.UtcNow
                 };
+
                 if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                {
                     client.SetSubscription(EventType.Join | EventType.JoinRequest);
+                }
+
                 client.SetPresence(presence);
                 client.Initialize();
                 try
@@ -148,7 +145,6 @@ namespace EnderIce2.SDRSharpPlugin
             {
                 _controlPanel.ChangeStatus = "RPC is disabled";
             }
-
             LogWriter.WriteToFile("EOM Initialize");
         }
         private void Client_OnPresenceUpdate(object sender, PresenceMessage args)
@@ -243,7 +239,7 @@ namespace EnderIce2.SDRSharpPlugin
                         }
                     }
                     LogWriter.WriteToFile("Waiting 500ms in loop...");
-                    await Task.Delay(500);
+                    await Task.Delay(500).ConfigureAwait(false);
                     if (_control.RdsRadioText != null)
                     {
                         if (_control.IsPlaying)
@@ -287,7 +283,7 @@ namespace EnderIce2.SDRSharpPlugin
                                 LogWriter.WriteToFile(ex.ToString());
                             }
                             /* presence.Secrets.JoinSecret = */
-                            // TODO: _control.RegisterFrontControl(Gui, PluginPosition.Top);
+                            /* _control.RegisterFrontControl(Gui, PluginPosition.Top); */
                         }
                         try
                         {

@@ -46,9 +46,7 @@ namespace EnderIce2.SDRSharpPlugin
             AnswerD = false;
             button1.Visible = false;
             button2.Visible = false;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             SetDefaultTextInLabel(tmpansw);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             return tmpansw;
         }
         private async Task SetDefaultTextInLabel(bool accepted)
