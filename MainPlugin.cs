@@ -17,9 +17,9 @@ namespace EnderIce2.SDRSharpPlugin
         private const LogLevel logLevel = LogLevel.Trace;
         private const int discordPipe = -1;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        bool RPCalreadyLoaded = false;
+        bool RPCalreadyLoaded;
         private ISharpControl _control;
-        bool playedBefore = false;
+        bool playedBefore;
         private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         private TopWindowMessages windowMessages;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
@@ -263,7 +263,10 @@ namespace EnderIce2.SDRSharpPlugin
                             {
                                 string space_for_listen_list = " | ";
                                 if (!Utils.GetBooleanSetting("EnableRPCInvite", false))
+                                {
                                     space_for_listen_list = "";
+                                }
+
                                 LogWriter.WriteToFile($"Frequency: {_control.Frequency}");
                                 LogWriter.WriteToFile($"RdsRadioText: {_control.RdsRadioText}");
                                 LogWriter.WriteToFile($"RdsProgramService: {_control.RdsProgramService}");
