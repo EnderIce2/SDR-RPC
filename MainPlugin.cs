@@ -20,7 +20,7 @@ namespace EnderIce2.SDRSharpPlugin
         bool RPCalreadyLoaded;
         private ISharpControl _control;
         bool playedBefore;
-        private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
+        //private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         private TopWindowMessages windowMessages;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private RichPresence presence = new RichPresence()
@@ -43,7 +43,6 @@ namespace EnderIce2.SDRSharpPlugin
         public void Initialize(ISharpControl control)
         {
             IConfigurationPanelProvider configurationPanelProvider;
-
             if (Utils.GetBooleanSetting("ShowWelcomePage", true))
             {
                 new WelcomeForm().ShowDialog();
@@ -132,7 +131,7 @@ namespace EnderIce2.SDRSharpPlugin
                 try
                 {
                     configurationPanelProvider = (IConfigurationPanelProvider)_control.Source;
-                    controllerPanel = (SDRSharp.FrontEnds.SpyServer.ControllerPanel)configurationPanelProvider.Gui;
+                    //controllerPanel = (SDRSharp.FrontEnds.SpyServer.ControllerPanel)configurationPanelProvider.Gui;
                 }
                 catch (Exception ex)
                 {
@@ -229,9 +228,9 @@ namespace EnderIce2.SDRSharpPlugin
                         LogWriter.WriteToFile("Setting secret...");
                         try
                         {
-                            string sdr_url = "sdr://" + controllerPanel.Host + ":" + controllerPanel.Port + "/";
-                            LogWriter.WriteToFile(sdr_url);
-                            presence.Secrets.JoinSecret = sdr_url;
+                            //string sdr_url = "sdr://" + controllerPanel.Host + ":" + controllerPanel.Port + "/";
+                            //LogWriter.WriteToFile(sdr_url);
+                            //presence.Secrets.JoinSecret = sdr_url;
                         }
                         catch (Exception ex)
                         {
