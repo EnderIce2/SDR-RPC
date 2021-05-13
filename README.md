@@ -3,7 +3,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/EnderIce2/SDR-RPC)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/800cd7ade7ab4aa386f79b5c999a2959)](https://app.codacy.com/gh/EnderIce2/SDR-RPC?utm_source=github.com&utm_medium=referral&utm_content=EnderIce2/SDR-RPC&utm_campaign=Badge_Grade_Settings)
 [![CodeFactor](https://www.codefactor.io/repository/github/enderice2/sdr-rpc/badge?s=6ea1f91b515716a019633ad07f7d3138bc136f22)](https://www.codefactor.io/repository/github/enderice2/sdr-rpc)
-![Twitter Follow](https://img.shields.io/twitter/follow/enderice22?style=social)
+[![Twitter Follow](https://img.shields.io/twitter/follow/enderice22?style=social)](https://twitter.com/intent/follow?screen_name=enderice22)
 # SDR-RPC
 
 SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord RPC feature in it
