@@ -16,12 +16,16 @@ namespace EnderIce2.SDRSharpPlugin
         private SettingsPanel _controlPanel;
         private const LogLevel logLevel = LogLevel.Trace;
         private const int discordPipe = -1;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        bool RPCalreadyLoaded;
+        private bool RPCalreadyLoaded;
+
         private ISharpControl _control;
-        bool playedBefore;
+        private bool playedBefore;
+
         //private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         private TopWindowMessages windowMessages;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private RichPresence presence = new RichPresence()
         {
@@ -35,11 +39,13 @@ namespace EnderIce2.SDRSharpPlugin
                 SmallImageText = $"SDR-RPC plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version} by EnderIce2" // should show the correct version
             }
         };
+
         private DiscordRpcClient client;
         private bool isRunning = true;
         public string DisplayName => _displayName;
         public bool HasGui => true;
         public UserControl Gui => _controlPanel;
+
         public void Initialize(ISharpControl control)
         {
             IConfigurationPanelProvider configurationPanelProvider;
@@ -146,46 +152,56 @@ namespace EnderIce2.SDRSharpPlugin
             }
             LogWriter.WriteToFile("EOM Initialize");
         }
+
         private void Client_OnPresenceUpdate(object sender, PresenceMessage args)
         {
             LogWriter.WriteToFile($"[RpcMessage] | Presence state: {args.Presence.State}");
         }
+
         private void Client_OnRpcMessage(object sender, IMessage msg)
         {
             LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
         }
+
         private void OnConnectionFailed(object sender, ConnectionFailedMessage args)
         {
             _controlPanel.ChangeStatus = $"RPC Connection Failed!\n{args.Type} | {args.FailedPipe}";
         }
+
         private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args)
         {
             _controlPanel.ChangeStatus = "RPC Connection Established!";
         }
+
         private void OnError(object sender, ErrorMessage args)
         {
             _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
             windowMessages.ChangeLabel = "SDR# RPC | Internal error";
         }
+
         private void OnClose(object sender, CloseMessage args)
         {
             _controlPanel.ChangeStatus = "RPC Closed";
             windowMessages.ChangeLabel = "SDR# RPC | Closed";
             Close();
         }
+
         private void OnReady(object sender, ReadyMessage args)
         {
             _controlPanel.ChangeStatus = "RPC Ready";
             windowMessages.ChangeLabel = "SDR# RPC | Ready";
         }
+
         private void OnSubscribe(object sender, SubscribeMessage args)
         {
             _controlPanel.ChangeStatus = $"Subscribed: {args.Event}";
         }
+
         private void OnUnsubscribe(object sender, UnsubscribeMessage args)
         {
             _controlPanel.ChangeStatus = $"Unsubscribed: {args.Event}";
         }
+
         private void OnJoin(object sender, JoinMessage args)
         {
             presence.Party.Size++;
@@ -196,6 +212,7 @@ namespace EnderIce2.SDRSharpPlugin
             Utils.SaveSetting("spyserver.uri", args.Secret);
             _control.StartRadio();
         }
+
         private async void OnJoinRequested(object sender, JoinRequestMessage args)
         {
             try
@@ -214,7 +231,8 @@ namespace EnderIce2.SDRSharpPlugin
                 MessageBox.Show(ex.ToString());
             }
         }
-        async Task MainLoop()
+
+        private async Task MainLoop()
         {
             try
             {
@@ -324,6 +342,7 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile(ex.ToString());
             }
         }
+
         public void Close()
         {
             LogWriter.WriteToFile("Close called");
