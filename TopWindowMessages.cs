@@ -14,10 +14,7 @@ namespace EnderIce2.SDRSharpPlugin
         private string _ChangeLabel;
         public string ChangeLabel
         {
-            get
-            {
-                return _ChangeLabel;
-            }
+            get => _ChangeLabel;
             set
             {
                 _ChangeLabel = value;

@@ -10,10 +10,7 @@ namespace EnderIce2.SDRSharpPlugin
         private string _ChangeStatus;
         public string ChangeStatus
         {
-            get
-            {
-                return _ChangeStatus;
-            }
+            get => _ChangeStatus;
             set
             {
                 _ChangeStatus = value;
@@ -25,32 +22,9 @@ namespace EnderIce2.SDRSharpPlugin
         {
             InitializeComponent();
             textBox1.Text = Utils.GetStringSetting("ClientID");
-            if (Utils.GetBooleanSetting("EnableRPC", true))
-            {
-                checkBox1.Checked = true;
-            }
-            else
-            {
-                checkBox1.Checked = false;
-            }
-
-            if (Utils.GetBooleanSetting("LogRPC", false))
-            {
-                checkBox2.Checked = true;
-            }
-            else
-            {
-                checkBox2.Checked = false;
-            }
-
-            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-            {
-                checkBox3.Checked = true;
-            }
-            else
-            {
-                checkBox3.Checked = false;
-            }
+            checkBox1.Checked = Utils.GetBooleanSetting("EnableRPC", true);
+            checkBox2.Checked = Utils.GetBooleanSetting("LogRPC", false);
+            checkBox3.Checked = Utils.GetBooleanSetting("EnableRPCInvite", false);
             LogWriter.WriteToFile("SettingsPanel loaded");
         }
 
@@ -62,15 +36,9 @@ namespace EnderIce2.SDRSharpPlugin
             /* Utils.GetBooleanSetting("EnableRPC"); */
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC");
-        }
+        private void Button1_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC");
 
-        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            Utils.SaveSetting("LogRPC", checkBox2.Checked);
-        }
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e) => Utils.SaveSetting("LogRPC", checkBox2.Checked);
 
         private void TextBox1_KeyPress(object sender, KeyPressEventArgs e)
         {

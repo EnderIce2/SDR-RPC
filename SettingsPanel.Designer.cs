@@ -113,7 +113,7 @@
             // 
             this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox2.Font = new System.Drawing.Font("Verdana", 7F);
+            this.checkBox2.Font = new System.Drawing.Font("Verdana", 6.5F);
             this.checkBox2.ForeColor = System.Drawing.Color.Black;
             this.checkBox2.Location = new System.Drawing.Point(3, 22);
             this.checkBox2.Name = "checkBox2";
@@ -127,7 +127,7 @@
             // 
             this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox3.Font = new System.Drawing.Font("Verdana", 7F);
+            this.checkBox3.Font = new System.Drawing.Font("Verdana", 6.5F);
             this.checkBox3.ForeColor = System.Drawing.Color.Black;
             this.checkBox3.Location = new System.Drawing.Point(3, 43);
             this.checkBox3.Name = "checkBox3";
