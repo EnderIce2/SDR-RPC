@@ -12,13 +12,9 @@ namespace EnderIce2.SDRSharpPlugin
 {
     public class MainPlugin : ISharpPlugin
     {
-        private const string _displayName = "Discord RPC";
         private SettingsPanel _controlPanel;
         private const LogLevel logLevel = LogLevel.Trace;
         private const int discordPipe = -1;
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private bool RPCalreadyLoaded;
 
         private ISharpControl _control;
         private bool playedBefore;
@@ -26,8 +22,7 @@ namespace EnderIce2.SDRSharpPlugin
         //private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         private TopWindowMessages windowMessages;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private RichPresence presence = new RichPresence()
+        private readonly RichPresence presence = new RichPresence()
         {
             Details = "Loading...",
             State = "Loading...",
@@ -42,13 +37,12 @@ namespace EnderIce2.SDRSharpPlugin
 
         private DiscordRpcClient client;
         private bool isRunning = true;
-        public string DisplayName => _displayName;
         public bool HasGui => true;
+        public string DisplayName => "Discord RPC";
         public UserControl Gui => _controlPanel;
 
         public void Initialize(ISharpControl control)
         {
-            IConfigurationPanelProvider configurationPanelProvider;
             if (Utils.GetBooleanSetting("ShowWelcomePage", true))
             {
                 new WelcomeForm().ShowDialog();
@@ -62,6 +56,18 @@ namespace EnderIce2.SDRSharpPlugin
                 if (Utils.GetBooleanSetting("EnableRPCInvite", false))
                 {
                     _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
+                    presence.Secrets = new Secrets()
+                    {
+                        JoinSecret = "invalid_secret"
+                    };
+                    presence.Party = new Party()
+                    {
+                        ID = Secrets.CreateFriendlySecret(new Random()),
+                        Size = 1,
+                        Max = 100
+                    };
+                    windowMessages.Show();
+                    client.SetSubscription(EventType.Join | EventType.JoinRequest);
                 }
             }
             catch (Exception ex)
@@ -69,46 +75,16 @@ namespace EnderIce2.SDRSharpPlugin
                 MessageBox.Show(ex.ToString());
             }
 
-            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-            {
-                presence.Secrets = new Secrets()
-                {
-                    JoinSecret = "invalid_secret"
-                };
-                presence.Party = new Party()
-                {
-                    ID = Secrets.CreateFriendlySecret(new Random()),
-                    Size = 1,
-                    Max = 100
-                };
-            }
-
-            if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-            {
-                windowMessages.Show();
-            }
-
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
-                if (RPCalreadyLoaded)
-                {
-                    _controlPanel.ChangeStatus = "Restart required";
-                    return;
-                }
                 if (Utils.GetStringSetting("ClientID").Replace(" ", "").Length != 18)
                 {
-                    client = new DiscordRpcClient("765213507321856078", pipe: discordPipe)
-                    {
-                        Logger = new ConsoleLogger(logLevel, true)
-                    };
+                    Utils.SaveSetting("ClientID", "765213507321856078");
                 }
-                else
+                client = new DiscordRpcClient(Utils.GetStringSetting("ClientID"), pipe: discordPipe)
                 {
-                    client = new DiscordRpcClient(Utils.GetStringSetting("ClientID"), pipe: discordPipe)
-                    {
-                        Logger = new ConsoleLogger(logLevel, true)
-                    };
-                }
+                    Logger = new ConsoleLogger(logLevel, true)
+                };
 
                 client.RegisterUriScheme();
                 client.OnRpcMessage += Client_OnRpcMessage;
@@ -127,16 +103,11 @@ namespace EnderIce2.SDRSharpPlugin
                     Start = DateTime.UtcNow
                 };
 
-                if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                {
-                    client.SetSubscription(EventType.Join | EventType.JoinRequest);
-                }
-
                 client.SetPresence(presence);
                 client.Initialize();
                 try
                 {
-                    configurationPanelProvider = (IConfigurationPanelProvider)_control.Source;
+                    IConfigurationPanelProvider configurationPanelProvider = (IConfigurationPanelProvider)_control.Source;
                     //controllerPanel = (SDRSharp.FrontEnds.SpyServer.ControllerPanel)configurationPanelProvider.Gui;
                 }
                 catch (Exception ex)
@@ -151,85 +122,6 @@ namespace EnderIce2.SDRSharpPlugin
                 _controlPanel.ChangeStatus = "RPC is disabled";
             }
             LogWriter.WriteToFile("EOM Initialize");
-        }
-
-        private void Client_OnPresenceUpdate(object sender, PresenceMessage args)
-        {
-            LogWriter.WriteToFile($"[RpcMessage] | Presence state: {args.Presence.State}");
-        }
-
-        private void Client_OnRpcMessage(object sender, IMessage msg)
-        {
-            LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
-        }
-
-        private void OnConnectionFailed(object sender, ConnectionFailedMessage args)
-        {
-            _controlPanel.ChangeStatus = $"RPC Connection Failed!\n{args.Type} | {args.FailedPipe}";
-        }
-
-        private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args)
-        {
-            _controlPanel.ChangeStatus = "RPC Connection Established!";
-        }
-
-        private void OnError(object sender, ErrorMessage args)
-        {
-            _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
-            windowMessages.ChangeLabel = "SDR# RPC | Internal error";
-        }
-
-        private void OnClose(object sender, CloseMessage args)
-        {
-            _controlPanel.ChangeStatus = "RPC Closed";
-            windowMessages.ChangeLabel = "SDR# RPC | Closed";
-            Close();
-        }
-
-        private void OnReady(object sender, ReadyMessage args)
-        {
-            _controlPanel.ChangeStatus = "RPC Ready";
-            windowMessages.ChangeLabel = "SDR# RPC | Ready";
-        }
-
-        private void OnSubscribe(object sender, SubscribeMessage args)
-        {
-            _controlPanel.ChangeStatus = $"Subscribed: {args.Event}";
-        }
-
-        private void OnUnsubscribe(object sender, UnsubscribeMessage args)
-        {
-            _controlPanel.ChangeStatus = $"Unsubscribed: {args.Event}";
-        }
-
-        private void OnJoin(object sender, JoinMessage args)
-        {
-            presence.Party.Size++;
-            presence.Secrets.JoinSecret = args.Secret;
-            MessageBox.Show("OnJoin: " + args.Secret);
-            _control.StopRadio();
-            _control.RefreshSource(true);
-            Utils.SaveSetting("spyserver.uri", args.Secret);
-            _control.StartRadio();
-        }
-
-        private async void OnJoinRequested(object sender, JoinRequestMessage args)
-        {
-            try
-            {
-                if (await windowMessages.RequestAnswer(client, args))
-                {
-                    MessageBox.Show("Accepted RequestAnswer");
-                }
-                else
-                {
-                    MessageBox.Show("Declined RequestAnswer");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
         }
 
         private async Task MainLoop()
@@ -293,6 +185,10 @@ namespace EnderIce2.SDRSharpPlugin
                                 {
                                     presence.State = $"RDS: unknown{space_for_listen_list}";
                                 }
+                                else if (_control.FmStereo)
+                                {
+                                    presence.State = $"RDS: ((( {_control.RdsProgramService} ))) - {_control.RdsRadioText}{space_for_listen_list}";
+                                }
                                 else
                                 {
                                     presence.State = $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}{space_for_listen_list}";
@@ -348,6 +244,67 @@ namespace EnderIce2.SDRSharpPlugin
             LogWriter.WriteToFile("Close called");
             isRunning = false;
             client.Dispose();
+        }
+
+        private void Client_OnPresenceUpdate(object sender, PresenceMessage args) => LogWriter.WriteToFile($"[RpcMessage] | Presence state: {args.Presence.State}");
+
+        private void Client_OnRpcMessage(object sender, IMessage msg) => LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
+
+        private void OnConnectionFailed(object sender, ConnectionFailedMessage args) => _controlPanel.ChangeStatus = $"RPC Connection Failed!\n{args.Type} | {args.FailedPipe}";
+
+        private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args) => _controlPanel.ChangeStatus = "RPC Connection Established!";
+
+        private void OnSubscribe(object sender, SubscribeMessage args) => _controlPanel.ChangeStatus = $"Subscribed: {args.Event}";
+
+        private void OnUnsubscribe(object sender, UnsubscribeMessage args) => _controlPanel.ChangeStatus = $"Unsubscribed: {args.Event}";
+
+        private void OnError(object sender, ErrorMessage args)
+        {
+            _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
+            windowMessages.ChangeLabel = "SDR# RPC | Internal error";
+        }
+
+        private void OnClose(object sender, CloseMessage args)
+        {
+            _controlPanel.ChangeStatus = "RPC Closed";
+            windowMessages.ChangeLabel = "SDR# RPC | Closed";
+            Close();
+        }
+
+        private void OnReady(object sender, ReadyMessage args)
+        {
+            _controlPanel.ChangeStatus = "RPC Ready";
+            windowMessages.ChangeLabel = "SDR# RPC | Ready";
+        }
+
+        private void OnJoin(object sender, JoinMessage args)
+        {
+            presence.Party.Size++;
+            presence.Secrets.JoinSecret = args.Secret;
+            MessageBox.Show("OnJoin: " + args.Secret);
+            _control.StopRadio();
+            _control.RefreshSource(true);
+            Utils.SaveSetting("spyserver.uri", args.Secret);
+            _control.StartRadio();
+        }
+
+        private async void OnJoinRequested(object sender, JoinRequestMessage args)
+        {
+            try
+            {
+                if (await windowMessages.RequestAnswer(client, args))
+                {
+                    MessageBox.Show("Accepted RequestAnswer");
+                }
+                else
+                {
+                    MessageBox.Show("Declined RequestAnswer");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }

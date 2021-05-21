@@ -7,10 +7,7 @@ namespace EnderIce2.SDRSharpPlugin
 {
     public partial class TopWindowMessages : UserControl
     {
-        public TopWindowMessages()
-        {
-            InitializeComponent();
-        }
+        public TopWindowMessages() => InitializeComponent();
         private string _ChangeLabel;
         public string ChangeLabel
         {
@@ -46,7 +43,7 @@ namespace EnderIce2.SDRSharpPlugin
             SetDefaultTextInLabel(tmpansw);
             return tmpansw;
         }
-        private async Task SetDefaultTextInLabel(bool accepted)
+        private async void SetDefaultTextInLabel(bool accepted)
         {
             if (accepted)
             {
