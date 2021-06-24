@@ -50,29 +50,6 @@ namespace EnderIce2.SDRSharpPlugin
             _controlPanel = new SettingsPanel();
             windowMessages = new TopWindowMessages(); // TODO: do something when "EnableRPCInvite" is set to false
             _control = control;
-            try
-            {
-                if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                {
-                    _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
-                    presence.Secrets = new Secrets()
-                    {
-                        JoinSecret = "invalid_secret"
-                    };
-                    presence.Party = new Party()
-                    {
-                        ID = Secrets.CreateFriendlySecret(new Random()),
-                        Size = 1,
-                        Max = 100
-                    };
-                    windowMessages.Show();
-                    client.SetSubscription(EventType.Join | EventType.JoinRequest);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
 
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
@@ -104,6 +81,29 @@ namespace EnderIce2.SDRSharpPlugin
 
                 client.SetPresence(presence);
                 client.Initialize();
+                try
+                {
+                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    //{
+                    //    _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
+                    //    presence.Secrets = new Secrets()
+                    //    {
+                    //        JoinSecret = "invalid_secret"
+                    //    };
+                    //    presence.Party = new Party()
+                    //    {
+                    //        ID = Secrets.CreateFriendlySecret(new Random()),
+                    //        Size = 1,
+                    //        Max = 100
+                    //    };
+                    //    windowMessages.Show();
+                    //    client.SetSubscription(EventType.Join | EventType.JoinRequest);
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
                 _ = MainLoop();
             }
             else
@@ -122,21 +122,21 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
                 while (client != null && isRunning)
                 {
-                    if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                    {
-                        LogWriter.WriteToFile("Setting secret...");
-                        try
-                        {
-                            // TODO: Get spy server host + port address
-                            //string sdr_url = "sdr://" + host + ":" + port + "/";
-                            //LogWriter.WriteToFile(sdr_url);
-                            //presence.Secrets.JoinSecret = sdr_url;
-                        }
-                        catch (Exception ex)
-                        {
-                            LogWriter.WriteToFile(ex.ToString());
-                        }
-                    }
+                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    //{
+                    //    LogWriter.WriteToFile("Setting secret...");
+                    //    try
+                    //    {
+                    //        // TODO: Get spy server host + port address
+                    //        //string sdr_url = "sdr://" + host + ":" + port + "/";
+                    //        //LogWriter.WriteToFile(sdr_url);
+                    //        //presence.Secrets.JoinSecret = sdr_url;
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        LogWriter.WriteToFile(ex.ToString());
+                    //    }
+                    //}
                     LogWriter.WriteToFile("Waiting 500ms in loop...");
                     await Task.Delay(500).ConfigureAwait(false);
                     if (_control.RdsRadioText != null)
