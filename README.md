@@ -41,7 +41,7 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 1. You need to download this stuff before compiling:
 - [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
   - [.NET 4.6](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net46-developer-pack-offline-installer)
-  - SDRSharp files (for References)
+  - [SDRSharp Plugin SDK](https://airspy.com/?ddownload=5944)
     - SDRSharp.Common.dll
     - SDRSharp.PanView.dll
     - SDRSharp.Radio.dll
