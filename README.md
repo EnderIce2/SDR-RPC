@@ -81,5 +81,4 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 ### 📕TODO List
 
 - Invite people to get Spy Server Address or connecting via voice chat system to listen and having the ability to change the frequency
-- Change Settings Panel to WPF User Control
-- Add better RDS decoder (if it is even possible)
+- Change Settings Panel to match SDR# theme
