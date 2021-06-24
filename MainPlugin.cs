@@ -19,7 +19,6 @@ namespace EnderIce2.SDRSharpPlugin
         private ISharpControl _control;
         private bool playedBefore;
 
-        //private SDRSharp.FrontEnds.SpyServer.ControllerPanel controllerPanel;
         private TopWindowMessages windowMessages;
 
         private readonly RichPresence presence = new RichPresence()
@@ -105,16 +104,6 @@ namespace EnderIce2.SDRSharpPlugin
 
                 client.SetPresence(presence);
                 client.Initialize();
-                try
-                {
-                    IConfigurationPanelProvider configurationPanelProvider = (IConfigurationPanelProvider)_control.Source;
-                    //controllerPanel = (SDRSharp.FrontEnds.SpyServer.ControllerPanel)configurationPanelProvider.Gui;
-                }
-                catch (Exception ex)
-                {
-                    LogWriter.WriteToFile("----> " + ex);
-                    MessageBox.Show($"Cannot get Spy Server Network address\n\nError:\n{ex}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
                 _ = MainLoop();
             }
             else
@@ -138,7 +127,8 @@ namespace EnderIce2.SDRSharpPlugin
                         LogWriter.WriteToFile("Setting secret...");
                         try
                         {
-                            //string sdr_url = "sdr://" + controllerPanel.Host + ":" + controllerPanel.Port + "/";
+                            // TODO: Get spy server host + port address
+                            //string sdr_url = "sdr://" + host + ":" + port + "/";
                             //LogWriter.WriteToFile(sdr_url);
                             //presence.Secrets.JoinSecret = sdr_url;
                         }
