@@ -24,28 +24,10 @@ namespace EnderIce2.SDRSharpPlugin
             textBox1.Text = Utils.GetStringSetting("ClientID");
             checkBox1.Checked = Utils.GetBooleanSetting("EnableRPC", true);
             checkBox2.Checked = Utils.GetBooleanSetting("LogRPC", false);
-            checkBox3.Checked = Utils.GetBooleanSetting("EnableRPCInvite", false);
             LogWriter.WriteToFile("SettingsPanel loaded");
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC"); // open the url (on some systems can show "The system cannot find the file specified.")
-            }
-            catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start("iexplore", "https://github.com/EnderIce2/SDR-RPC"); // open the url with internet explorer
-                }
-                catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
-                {
-                    System.Diagnostics.Process.Start("notepad", "https://github.com/EnderIce2/SDR-RPC"); // if internet explorer is not installed, open the link in notepad
-                }
-            }
-        }
+        private void Button1_Click(object sender, EventArgs e) => new SettingsForm().Show();
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -56,13 +38,6 @@ namespace EnderIce2.SDRSharpPlugin
         }
 
         private void CheckBox2_CheckedChanged(object sender, EventArgs e) => Utils.SaveSetting("LogRPC", checkBox2.Checked);
-
-        private void CheckBox3_CheckedChanged(object sender, EventArgs e)
-        {
-            Utils.SaveSetting("EnableRPCInvite", checkBox3.Checked);
-            label1.Text = "Restart required";
-            LogWriter.WriteToFile($"checkbox on SettingsPanel clicked {checkBox3.Checked}");
-        }
 
         private async void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -82,7 +57,7 @@ namespace EnderIce2.SDRSharpPlugin
             e.Handled = true;
             e.SuppressKeyPress = true;
             await Task.Delay(100).ConfigureAwait(false);
-            textBox1.Text = Utils.GetStringSetting("ClientID");
+            textBox1.Text = Utils.GetStringSetting("ClientID"); // write what we stored, should not trigger keydown event
             label1.Text = $"Configuration Updated.\nNew ID: {Utils.GetStringSetting("ClientID")}";
         }
 

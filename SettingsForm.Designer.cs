@@ -1,6 +1,6 @@
 ﻿namespace EnderIce2.SDRSharpPlugin
 {
-    partial class WelcomeForm
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -104,7 +104,7 @@
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
-            // WelcomeForm
+            // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -123,11 +123,11 @@
             this.MaximumSize = new System.Drawing.Size(816, 489);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(816, 489);
-            this.Name = "WelcomeForm";
+            this.Name = "SettingsForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Thank you for installing DiscordRPC by EnderIce2";
+            this.Text = "SDRSharp Discord RPC Settings";
             this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();

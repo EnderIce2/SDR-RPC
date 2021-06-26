@@ -19,7 +19,11 @@ namespace EnderIce2.SDRSharpPlugin
         private ISharpControl _control;
         private bool playedBefore;
 
-        private TopWindowMessages windowMessages;
+        private DiscordRpcClient client;
+        private bool isRunning = true;
+        public bool HasGui => true;
+        public string DisplayName => "Discord RPC";
+        public UserControl Gui => _controlPanel;
 
         private readonly RichPresence presence = new RichPresence()
         {
@@ -30,27 +34,14 @@ namespace EnderIce2.SDRSharpPlugin
                 LargeImageKey = "image_large",
                 LargeImageText = "SDRSharp",
                 SmallImageKey = "image_small",
-                SmallImageText = $"SDR-RPC plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version} by EnderIce2" // should show the correct version
+                SmallImageText = $"SDR-RPC Plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version}"
             }
         };
 
-        private DiscordRpcClient client;
-        private bool isRunning = true;
-        public bool HasGui => true;
-        public string DisplayName => "Discord RPC";
-        public UserControl Gui => _controlPanel;
-
         public void Initialize(ISharpControl control)
         {
-            if (Utils.GetBooleanSetting("ShowWelcomePage", true))
-            {
-                new WelcomeForm().ShowDialog();
-            }
-
             _controlPanel = new SettingsPanel();
-            windowMessages = new TopWindowMessages(); // TODO: do something when "EnableRPCInvite" is set to false
             _control = control;
-
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
                 if (Utils.GetStringSetting("ClientID").Replace(" ", "").Length != 18)
@@ -70,40 +61,12 @@ namespace EnderIce2.SDRSharpPlugin
                 client.OnError += OnError;
                 client.OnConnectionEstablished += OnConnectionEstablished;
                 client.OnConnectionFailed += OnConnectionFailed;
-                client.OnSubscribe += OnSubscribe;
-                client.OnUnsubscribe += OnUnsubscribe;
-                client.OnJoin += OnJoin;
-                client.OnJoinRequested += OnJoinRequested;
                 presence.Timestamps = new Timestamps()
                 {
                     Start = DateTime.UtcNow
                 };
-
                 client.SetPresence(presence);
                 client.Initialize();
-                try
-                {
-                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                    //{
-                    //    _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
-                    //    presence.Secrets = new Secrets()
-                    //    {
-                    //        JoinSecret = "invalid_secret"
-                    //    };
-                    //    presence.Party = new Party()
-                    //    {
-                    //        ID = Secrets.CreateFriendlySecret(new Random()),
-                    //        Size = 1,
-                    //        Max = 100
-                    //    };
-                    //    windowMessages.Show();
-                    //    client.SetSubscription(EventType.Join | EventType.JoinRequest);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
                 _ = MainLoop();
             }
             else
@@ -115,6 +78,7 @@ namespace EnderIce2.SDRSharpPlugin
 
         private async Task MainLoop()
         {
+            loop_start:
             try
             {
                 await Task.Delay(2000).ConfigureAwait(false);
@@ -122,23 +86,8 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
                 while (client != null && isRunning)
                 {
-                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                    //{
-                    //    LogWriter.WriteToFile("Setting secret...");
-                    //    try
-                    //    {
-                    //        // TODO: Get spy server host + port address
-                    //        //string sdr_url = "sdr://" + host + ":" + port + "/";
-                    //        //LogWriter.WriteToFile(sdr_url);
-                    //        //presence.Secrets.JoinSecret = sdr_url;
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-                    //        LogWriter.WriteToFile(ex.ToString());
-                    //    }
-                    //}
-                    LogWriter.WriteToFile("Waiting 500ms in loop...");
-                    await Task.Delay(500).ConfigureAwait(false);
+                    LogWriter.WriteToFile("Waiting 5000ms in loop...");
+                    await Task.Delay(5000).ConfigureAwait(false); // 5 second delay
                     if (_control.RdsRadioText != null)
                     {
                         if (_control.IsPlaying)
@@ -160,36 +109,21 @@ namespace EnderIce2.SDRSharpPlugin
                         {
                             try
                             {
-                                string space_for_listen_list = " | ";
-                                if (!Utils.GetBooleanSetting("EnableRPCInvite", false))
-                                {
-                                    space_for_listen_list = "";
-                                }
-
                                 LogWriter.WriteToFile($"Frequency: {_control.Frequency}");
                                 LogWriter.WriteToFile($"RdsRadioText: {_control.RdsRadioText}");
                                 LogWriter.WriteToFile($"RdsProgramService: {_control.RdsProgramService}");
                                 LogWriter.WriteToFile("Setting presence...");
-                                presence.Details = $"Frequency: {string.Format("{0:#,0,,0 Hz}", _control.Frequency)}";
-                                if (string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
-                                {
-                                    presence.State = $"RDS: unknown{space_for_listen_list}";
-                                }
-                                else if (_control.FmStereo)
-                                {
-                                    presence.State = $"RDS: ((( {_control.RdsProgramService} ))) - {_control.RdsRadioText}{space_for_listen_list}";
-                                }
-                                else
-                                {
-                                    presence.State = $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}{space_for_listen_list}";
-                                }
+                                presence.Details = $"Frequency: {$"{_control.Frequency:#,0,,0 Hz}"}";
+                                presence.State = string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService)
+                                    ? "RDS: unknown"
+                                    : _control.FmStereo
+                                        ? $"RDS: ((( {_control.RdsProgramService} ))) - {_control.RdsRadioText}"
+                                        : $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}";
                             }
                             catch (Exception ex)
                             {
                                 LogWriter.WriteToFile(ex.ToString());
                             }
-                            /* presence.Secrets.JoinSecret = */
-                            /* _control.RegisterFrontControl(Gui, PluginPosition.Top); */
                         }
                         try
                         {
@@ -221,8 +155,7 @@ namespace EnderIce2.SDRSharpPlugin
             {
                 if (ex.Message.Contains("The process cannot access the file"))
                 {
-                    _ = MainLoop();
-                    return;
+                    goto loop_start;
                 }
                 _controlPanel.ChangeStatus = $"RPC Update Error\n{ex.Message}";
                 LogWriter.WriteToFile(ex.ToString());
@@ -244,57 +177,14 @@ namespace EnderIce2.SDRSharpPlugin
 
         private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args) => _controlPanel.ChangeStatus = "RPC Connection Established!";
 
-        private void OnSubscribe(object sender, SubscribeMessage args) => _controlPanel.ChangeStatus = $"Subscribed: {args.Event}";
-
-        private void OnUnsubscribe(object sender, UnsubscribeMessage args) => _controlPanel.ChangeStatus = $"Unsubscribed: {args.Event}";
-
-        private void OnError(object sender, ErrorMessage args)
-        {
-            _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
-            windowMessages.ChangeLabel = "SDR# RPC | Internal error";
-        }
+        private void OnError(object sender, ErrorMessage args) => _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
 
         private void OnClose(object sender, CloseMessage args)
         {
             _controlPanel.ChangeStatus = "RPC Closed";
-            windowMessages.ChangeLabel = "SDR# RPC | Closed";
             Close();
         }
 
-        private void OnReady(object sender, ReadyMessage args)
-        {
-            _controlPanel.ChangeStatus = "RPC Ready";
-            windowMessages.ChangeLabel = "SDR# RPC | Ready";
-        }
-
-        private void OnJoin(object sender, JoinMessage args)
-        {
-            presence.Party.Size++;
-            presence.Secrets.JoinSecret = args.Secret;
-            MessageBox.Show("OnJoin: " + args.Secret);
-            _control.StopRadio();
-            _control.RefreshSource(true);
-            Utils.SaveSetting("spyserver.uri", args.Secret);
-            _control.StartRadio();
-        }
-
-        private async void OnJoinRequested(object sender, JoinRequestMessage args)
-        {
-            try
-            {
-                if (await windowMessages.RequestAnswer(client, args))
-                {
-                    MessageBox.Show("Accepted RequestAnswer");
-                }
-                else
-                {
-                    MessageBox.Show("Declined RequestAnswer");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
+        private void OnReady(object sender, ReadyMessage args) => _controlPanel.ChangeStatus = "RPC Ready";
     }
 }
