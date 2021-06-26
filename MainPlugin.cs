@@ -114,11 +114,17 @@ namespace EnderIce2.SDRSharpPlugin
                                 LogWriter.WriteToFile($"RdsProgramService: {_control.RdsProgramService}");
                                 LogWriter.WriteToFile("Setting presence...");
                                 presence.Details = $"Frequency: {$"{_control.Frequency:#,0,,0 Hz}"}";
-                                presence.State = string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService)
-                                    ? "RDS: unknown"
-                                    : _control.FmStereo
-                                        ? $"RDS: ((( {_control.RdsProgramService} ))) - {_control.RdsRadioText}"
-                                        : $"RDS: {_control.RdsProgramService} - {_control.RdsRadioText}";
+                                if (!string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
+                                {
+                                    string radio_text = string.IsNullOrWhiteSpace(_control.RdsRadioText) ? "" : $" - {_control.RdsRadioText}";
+                                    presence.State = _control.FmStereo
+                                        ? $"RDS: ((( {_control.RdsProgramService} ))){radio_text}"
+                                        : $"RDS: {_control.RdsProgramService}{radio_text}";
+                                }
+                                else
+                                {
+                                    presence.State = $"RDS: unknown";
+                                }
                             }
                             catch (Exception ex)
                             {
