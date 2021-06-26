@@ -30,7 +30,7 @@ namespace EnderIce2.SDRSharpPlugin
                 LargeImageKey = "image_large",
                 LargeImageText = "SDRSharp",
                 SmallImageKey = "image_small",
-                SmallImageText = $"SDR-RPC plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version} by EnderIce2" // should show the correct version
+                SmallImageText = $"SDR-RPC Plugin v{Assembly.LoadFrom("SDR-RPC.dll").GetName().Version}" // should show the correct version
             }
         };
 
@@ -83,22 +83,22 @@ namespace EnderIce2.SDRSharpPlugin
                 client.Initialize();
                 try
                 {
-                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                    //{
-                    //    _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
-                    //    presence.Secrets = new Secrets()
-                    //    {
-                    //        JoinSecret = "invalid_secret"
-                    //    };
-                    //    presence.Party = new Party()
-                    //    {
-                    //        ID = Secrets.CreateFriendlySecret(new Random()),
-                    //        Size = 1,
-                    //        Max = 100
-                    //    };
-                    //    windowMessages.Show();
-                    //    client.SetSubscription(EventType.Join | EventType.JoinRequest);
-                    //}
+                    if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    {
+                        _control.RegisterFrontControl(windowMessages, PluginPosition.Top);
+                        presence.Secrets = new Secrets()
+                        {
+                            JoinSecret = "invalid_secret"
+                        };
+                        presence.Party = new Party()
+                        {
+                            ID = Secrets.CreateFriendlySecret(new Random()),
+                            Size = 1,
+                            Max = 100
+                        };
+                        windowMessages.Show();
+                        client.SetSubscription(EventType.Join | EventType.JoinRequest);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -122,21 +122,21 @@ namespace EnderIce2.SDRSharpPlugin
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
                 while (client != null && isRunning)
                 {
-                    //if (Utils.GetBooleanSetting("EnableRPCInvite", false))
-                    //{
-                    //    LogWriter.WriteToFile("Setting secret...");
-                    //    try
-                    //    {
-                    //        // TODO: Get spy server host + port address
-                    //        //string sdr_url = "sdr://" + host + ":" + port + "/";
-                    //        //LogWriter.WriteToFile(sdr_url);
-                    //        //presence.Secrets.JoinSecret = sdr_url;
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-                    //        LogWriter.WriteToFile(ex.ToString());
-                    //    }
-                    //}
+                    if (Utils.GetBooleanSetting("EnableRPCInvite", false))
+                    {
+                        LogWriter.WriteToFile("Setting secret...");
+                        try
+                        {
+                            // TODO: Get spy server host + port address
+                            //string sdr_url = "sdr://" + host + ":" + port + "/";
+                            //LogWriter.WriteToFile(sdr_url);
+                            //presence.Secrets.JoinSecret = sdr_url;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogWriter.WriteToFile(ex.ToString());
+                        }
+                    }
                     LogWriter.WriteToFile("Waiting 500ms in loop...");
                     await Task.Delay(500).ConfigureAwait(false);
                     if (_control.RdsRadioText != null)
