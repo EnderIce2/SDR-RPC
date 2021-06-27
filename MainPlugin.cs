@@ -20,17 +20,16 @@ namespace EnderIce2.SDRSharpPlugin
         private bool playedBefore;
 
         private DiscordRpcClient client;
-        private bool isRunning = true;
-        private bool isConnected = false;
+        private bool isConnected;
         public bool HasGui => true;
         public string DisplayName => "Discord RPC";
         public UserControl Gui => _controlPanel;
 
-        private readonly RichPresence presence = new RichPresence()
+        private readonly RichPresence presence = new RichPresence
         {
             Details = "Loading...",
             State = "Loading...",
-            Assets = new Assets()
+            Assets = new Assets
             {
                 LargeImageKey = "image_large",
                 LargeImageText = "SDRSharp",
@@ -84,11 +83,10 @@ namespace EnderIce2.SDRSharpPlugin
             try
             {
                 await Task.Delay(2000).ConfigureAwait(false);
-                isRunning = true;
-                LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
-                while (isRunning)
+                LogWriter.WriteToFile($"MainLoop called {client.IsInitialized}");
+                while (true)
                 {
-                    if (client != null && isRunning && isConnected)
+                    if (client != null && isConnected)
                     {
                         LogWriter.WriteToFile("Waiting 1000ms in loop...");
                         await Task.Delay(1000).ConfigureAwait(false); // 1 second delay
@@ -130,13 +128,6 @@ namespace EnderIce2.SDRSharpPlugin
                                             presence.State = $"RDS: unknown";
                                         }
                                         break;
-                                    case DetectorType.NFM:
-                                    case DetectorType.AM:
-                                    case DetectorType.DSB:
-                                    case DetectorType.LSB:
-                                    case DetectorType.USB:
-                                    case DetectorType.CW:
-                                    case DetectorType.RAW:
                                     default:
                                         presence.State = ""; // TODO: implement for every type; right now I don't really know what to add
                                         break;
@@ -144,7 +135,7 @@ namespace EnderIce2.SDRSharpPlugin
                             }
                             catch (Exception ex)
                             {
-                                LogWriter.WriteToFile("Set rpc exception\n" + ex.ToString());
+                                LogWriter.WriteToFile("Set rpc exception\n" + ex);
                             }
                         }
                         try
@@ -182,7 +173,6 @@ namespace EnderIce2.SDRSharpPlugin
         public void Close()
         {
             LogWriter.WriteToFile("Close called");
-            isRunning = false;
             client.Dispose();
         }
 
