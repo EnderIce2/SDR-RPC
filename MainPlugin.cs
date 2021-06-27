@@ -21,6 +21,7 @@ namespace EnderIce2.SDRSharpPlugin
 
         private DiscordRpcClient client;
         private bool isRunning = true;
+        private bool isConnected = false;
         public bool HasGui => true;
         public string DisplayName => "Discord RPC";
         public UserControl Gui => _controlPanel;
@@ -65,6 +66,7 @@ namespace EnderIce2.SDRSharpPlugin
                 {
                     Start = DateTime.UtcNow
                 };
+                client.SkipIdenticalPresence = true;
                 client.SetPresence(presence);
                 client.Initialize();
                 _ = MainLoop();
@@ -84,12 +86,12 @@ namespace EnderIce2.SDRSharpPlugin
                 await Task.Delay(2000).ConfigureAwait(false);
                 isRunning = true;
                 LogWriter.WriteToFile($"MainLoop called {isRunning} {client.IsInitialized}");
-                while (client != null && isRunning)
+                while (isRunning)
                 {
-                    LogWriter.WriteToFile("Waiting 5000ms in loop...");
-                    await Task.Delay(5000).ConfigureAwait(false); // 5 second delay
-                    if (_control.RdsRadioText != null)
+                    if (client != null && isRunning && isConnected)
                     {
+                        LogWriter.WriteToFile("Waiting 1000ms in loop...");
+                        await Task.Delay(1000).ConfigureAwait(false); // 1 second delay
                         if (_control.IsPlaying)
                         {
                             presence.Assets.SmallImageKey = "play";
@@ -103,32 +105,46 @@ namespace EnderIce2.SDRSharpPlugin
                         if (!playedBefore)
                         {
                             presence.Details = "Frequency: Not playing";
-                            presence.State = "RDS: Not playing";
+                            presence.State = "Not playing";
                         }
                         else
                         {
                             try
                             {
-                                LogWriter.WriteToFile($"Frequency: {_control.Frequency}");
-                                LogWriter.WriteToFile($"RdsRadioText: {_control.RdsRadioText}");
-                                LogWriter.WriteToFile($"RdsProgramService: {_control.RdsProgramService}");
+                                // TODO: Check BandPlan.xml file and set in the status
                                 LogWriter.WriteToFile("Setting presence...");
-                                presence.Details = $"Frequency: {$"{_control.Frequency:#,0,,0 Hz}"}";
-                                if (!string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
+                                string frequency_text = $"Frequency: {$"{_control.Frequency:#,0,,0 Hz}"} | Bandwidth: {$"{_control.FilterBandwidth:#,0,,0 Hz}"} | {Enum.GetName(typeof(DetectorType), _control.DetectorType)}";
+                                presence.Details = frequency_text;
+                                switch (_control.DetectorType)
                                 {
-                                    string radio_text = string.IsNullOrWhiteSpace(_control.RdsRadioText) ? "" : $" - {_control.RdsRadioText}";
-                                    presence.State = _control.FmStereo
-                                        ? $"RDS: ((( {_control.RdsProgramService} ))){radio_text}"
-                                        : $"RDS: {_control.RdsProgramService}{radio_text}";
-                                }
-                                else
-                                {
-                                    presence.State = $"RDS: unknown";
+                                    case DetectorType.WFM:
+                                        if (!string.IsNullOrWhiteSpace(_control.RdsRadioText + _control.RdsProgramService))
+                                        {
+                                            string radio_text = string.IsNullOrWhiteSpace(_control.RdsRadioText) ? "" : $" - {_control.RdsRadioText}";
+                                            presence.State = _control.FmStereo
+                                                ? $"RDS: ((( {_control.RdsProgramService} ))){radio_text}"
+                                                : $"RDS: {_control.RdsProgramService}{radio_text}";
+                                        }
+                                        else
+                                        {
+                                            presence.State = $"RDS: unknown";
+                                        }
+                                        break;
+                                    case DetectorType.NFM:
+                                    case DetectorType.AM:
+                                    case DetectorType.DSB:
+                                    case DetectorType.LSB:
+                                    case DetectorType.USB:
+                                    case DetectorType.CW:
+                                    case DetectorType.RAW:
+                                    default:
+                                        presence.State = ""; // TODO: implement for every type; right now I don't really know what to add
+                                        break;
                                 }
                             }
                             catch (Exception ex)
                             {
-                                LogWriter.WriteToFile(ex.ToString());
+                                LogWriter.WriteToFile("Set rpc exception\n" + ex.ToString());
                             }
                         }
                         try
@@ -142,15 +158,10 @@ namespace EnderIce2.SDRSharpPlugin
                         LogWriter.WriteToFile("SetPresence");
                         _controlPanel.ChangeStatus = $"Presence Updated {DateTime.UtcNow}";
                     }
-                    else
-                    {
-                        LogWriter.WriteToFile("Frequency or Radio Text are null!");
-                        await Task.Delay(1000).ConfigureAwait(false);
-                    }
                 }
                 if (client == null)
                 {
-                    _controlPanel.ChangeStatus = "Client was null";
+                    _controlPanel.ChangeStatus = "Client is null";
                 }
                 else
                 {
@@ -159,7 +170,7 @@ namespace EnderIce2.SDRSharpPlugin
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("The process cannot access the file"))
+                if (ex.Message.Contains("The process cannot access the file")) // not important exception
                 {
                     goto loop_start;
                 }
@@ -179,9 +190,17 @@ namespace EnderIce2.SDRSharpPlugin
 
         private void Client_OnRpcMessage(object sender, IMessage msg) => LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
 
-        private void OnConnectionFailed(object sender, ConnectionFailedMessage args) => _controlPanel.ChangeStatus = $"RPC Connection Failed!\n{args.Type} | {args.FailedPipe}";
+        private void OnConnectionFailed(object sender, ConnectionFailedMessage args)
+        {
+            _controlPanel.ChangeStatus = $"RPC Connection Failed!\n{args.Type} | {args.FailedPipe}";
+            isConnected = false;
+        }
 
-        private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args) => _controlPanel.ChangeStatus = "RPC Connection Established!";
+        private void OnConnectionEstablished(object sender, ConnectionEstablishedMessage args)
+        {
+            _controlPanel.ChangeStatus = "RPC Connection Established!";
+            isConnected = true;
+        }
 
         private void OnError(object sender, ErrorMessage args) => _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
 
