@@ -16,7 +16,6 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 - 🔌Most of the code is made asynchronous
 - 📖Logging for troubleshooting problems
 - 🔨Easy to install
-- 🎧Invite feature (give Spy Server Address or listen using voice chat system) [coming soon]
 
 ---
 
