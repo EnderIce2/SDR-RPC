@@ -61,7 +61,7 @@ namespace EnderIce2.SDRSharpPlugin
                 client.OnError += OnError;
                 client.OnConnectionEstablished += OnConnectionEstablished;
                 client.OnConnectionFailed += OnConnectionFailed;
-                presence.Timestamps = new Timestamps()
+                presence.Timestamps = new Timestamps
                 {
                     Start = DateTime.UtcNow
                 };
@@ -79,7 +79,7 @@ namespace EnderIce2.SDRSharpPlugin
 
         private async Task MainLoop()
         {
-            loop_start:
+        loop_start:
             try
             {
                 await Task.Delay(2000).ConfigureAwait(false);
@@ -176,9 +176,15 @@ namespace EnderIce2.SDRSharpPlugin
             client.Dispose();
         }
 
-        private void Client_OnPresenceUpdate(object sender, PresenceMessage args) => LogWriter.WriteToFile($"[RpcMessage] | Presence state: {args.Presence.State}");
+        private void Client_OnPresenceUpdate(object sender, PresenceMessage args)
+        {
+            LogWriter.WriteToFile($"[RpcMessage] | Presence state: {args.Presence.State}");
+        }
 
-        private void Client_OnRpcMessage(object sender, IMessage msg) => LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
+        private void Client_OnRpcMessage(object sender, IMessage msg)
+        {
+            LogWriter.WriteToFile($"[RpcMessage] | {msg.Type} | {msg}");
+        }
 
         private void OnConnectionFailed(object sender, ConnectionFailedMessage args)
         {
@@ -192,7 +198,10 @@ namespace EnderIce2.SDRSharpPlugin
             isConnected = true;
         }
 
-        private void OnError(object sender, ErrorMessage args) => _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
+        private void OnError(object sender, ErrorMessage args)
+        {
+            _controlPanel.ChangeStatus = $"RPC Error:\n{args.Message}";
+        }
 
         private void OnClose(object sender, CloseMessage args)
         {
@@ -200,6 +209,9 @@ namespace EnderIce2.SDRSharpPlugin
             Close();
         }
 
-        private void OnReady(object sender, ReadyMessage args) => _controlPanel.ChangeStatus = "RPC Ready";
+        private void OnReady(object sender, ReadyMessage args)
+        {
+            _controlPanel.ChangeStatus = "RPC Ready";
+        }
     }
 }
