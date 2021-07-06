@@ -27,4 +27,4 @@ SDR-RPC is an [SDRSharp](https://airspy.com/download/) plugin that adds Discord 
 
 ---
 
-More informations about this plugin you can find on [GitHub repository](https://github.com/EnderIce2/SDR-RPC)
+More informations about this plugin you can find on my [GitHub repository](https://github.com/EnderIce2/SDR-RPC)
