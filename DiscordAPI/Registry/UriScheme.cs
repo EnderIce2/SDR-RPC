@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace DiscordRPC.Registry
 {
     internal class UriSchemeRegister
-	{
+    {
         /// <summary>
         /// The ID of the Discord App to register
         /// </summary>
@@ -42,7 +42,7 @@ namespace DiscordRPC.Registry
         {
             //Get the creator
             IUriSchemeCreator creator = null;
-            switch(Environment.OSVersion.Platform)
+            switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32Windows:
                 case PlatformID.Win32S:
@@ -56,7 +56,7 @@ namespace DiscordRPC.Registry
                     _logger.Trace("Creating Unix Scheme Creator");
                     creator = new UnixUriSchemeCreator(_logger);
                     break;
-                
+
                 case PlatformID.MacOSX:
                     _logger.Trace("Creating MacOSX Scheme Creator");
                     creator = new MacUriSchemeCreator(_logger);

@@ -27,7 +27,7 @@ namespace DiscordRPC.Registry
                 logger.Error("Failed to register because the application could not be located.");
                 return false;
             }
-            
+
             logger.Trace("Registering Steam Command");
 
             //Prepare the command
@@ -49,6 +49,6 @@ namespace DiscordRPC.Registry
             logger.Trace("Registered {0}, {1}", filepath + "/" + register.ApplicationID + ".json", command);
             return true;
         }
-        
+
     }
 }

@@ -46,18 +46,18 @@ namespace EnderIce2.SDRSharpPlugin
     }
 }
 
-            //try
-            //{
-            //    System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC"); // open the url (on some systems can show "The system cannot find the file specified.")
-            //}
-            //catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
-            //{
-            //    try
-            //    {
-            //        System.Diagnostics.Process.Start("iexplore", "https://github.com/EnderIce2/SDR-RPC"); // open the url with internet explorer
-            //    }
-            //    catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
-            //    {
-            //        System.Diagnostics.Process.Start("notepad", "https://github.com/EnderIce2/SDR-RPC"); // if internet explorer is not installed (idk how we can get to that point but whatever), open the link in notepad
-            //    }
-            //}
+//try
+//{
+//    System.Diagnostics.Process.Start("https://github.com/EnderIce2/SDR-RPC"); // open the url (on some systems can show "The system cannot find the file specified.")
+//}
+//catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
+//{
+//    try
+//    {
+//        System.Diagnostics.Process.Start("iexplore", "https://github.com/EnderIce2/SDR-RPC"); // open the url with internet explorer
+//    }
+//    catch (System.ComponentModel.Win32Exception) // The system cannot find the file specified.
+//    {
+//        System.Diagnostics.Process.Start("notepad", "https://github.com/EnderIce2/SDR-RPC"); // if internet explorer is not installed (idk how we can get to that point but whatever), open the link in notepad
+//    }
+//}
