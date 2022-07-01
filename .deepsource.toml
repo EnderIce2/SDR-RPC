@@ -1,5 +1,7 @@
 version = 1
 
+exclude_patterns = ["DiscordAPI/**"]
+
 [[analyzers]]
 name = "csharp"
 enabled = true
