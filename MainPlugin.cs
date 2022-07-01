@@ -1,4 +1,4 @@
-﻿using DiscordRPC;
+using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Message;
 using SDRSharp.Common;
@@ -125,7 +125,7 @@ namespace EnderIce2.SDRSharpPlugin
                                         }
                                         else
                                         {
-                                            presence.State = $"RDS: unknown";
+                                            presence.State = "RDS: unknown";
                                         }
                                         break;
                                     default:
