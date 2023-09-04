@@ -14,7 +14,7 @@ namespace EnderIce2.SDRSharpPlugin
     {
         private SettingsPanel _controlPanel;
         private const LogLevel logLevel = LogLevel.Trace;
-        private const int discordPipe = -1;
+        private const int discordPipe = 0;
 
         private ISharpControl _control;
         private bool playedBefore;
