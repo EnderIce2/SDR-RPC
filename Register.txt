@@ -1,0 +1,1 @@
+﻿  <add key="Discord RPC" value="EnderIce2.SDRSharpPlugin.MainPlugin,SDR-RPC" />
