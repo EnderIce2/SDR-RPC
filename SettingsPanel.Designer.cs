@@ -47,7 +47,7 @@
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "Enable Discord RPC";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.EnableRPC_CheckedChanged);
             // 
             // label1
             // 
@@ -78,7 +78,7 @@
             this.button1.Size = new System.Drawing.Size(25, 25);
             this.button1.TabIndex = 4;
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.button1.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
             // SettingsPanel
             // 

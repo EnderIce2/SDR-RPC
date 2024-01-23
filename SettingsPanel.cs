@@ -1,6 +1,5 @@
 ﻿using SDRSharp.Radio;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EnderIce2.SDRSharpPlugin
@@ -25,9 +24,9 @@ namespace EnderIce2.SDRSharpPlugin
             LogWriter.WriteToFile("User Control Loaded");
         }
 
-        private void Button1_Click(object sender, EventArgs e) => new SettingsForm().Show();
+        private void SettingsButton_Click(object sender, EventArgs e) => new SettingsForm().Show();
 
-        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        private void EnableRPC_CheckedChanged(object sender, EventArgs e)
         {
             Utils.SaveSetting("EnableRPC", checkBox1.Checked);
             label1.Text = "Restart required";
