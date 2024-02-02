@@ -4,6 +4,7 @@ using DiscordRPC.Message;
 using SDRSharp.Common;
 using SDRSharp.Radio;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -44,10 +45,24 @@ namespace EnderIce2.SDRSharpPlugin
             _control = control;
             if (Utils.GetBooleanSetting("EnableRPC", true))
             {
-                client = new DiscordRpcClient(Utils.GetStringSetting("ClientID"), pipe: discordPipe)
+                if (Utils.GetStringSetting("ClientID").All(char.IsWhiteSpace))
                 {
-                    Logger = new ConsoleLogger(logLevel, true)
-                };
+                    Utils.SaveSetting("ClientID", "765213507321856078");
+                }
+
+                try
+                {
+                    client = new DiscordRpcClient(Utils.GetStringSetting("ClientID"), pipe: discordPipe)
+                    {
+                        Logger = new ConsoleLogger(logLevel, true)
+                    };
+                }
+                catch (Exception ex)
+                {
+                    _controlPanel.ChangeStatus = $"RPC Error: {ex.Message}";
+                    LogWriter.WriteToFile("Error in DiscordRpcClient\n" + ex.ToString());
+                    return;
+                }
 
                 client.RegisterUriScheme();
                 client.OnRpcMessage += Client_OnRpcMessage;
