@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <OutputType>Library</OutputType>
+    <Platforms>AnyCPU</Platforms>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RepositoryUrl>https://github.com/EnderIce2/SDR-RPC</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Copyright>Copyright © EnderIce2 2024</Copyright>
+    <PackageProjectUrl>https://enderice2.github.io/SDR-RPC/</PackageProjectUrl>
+    <PackageIcon></PackageIcon>
+    <Description>Show on Discord what are you listening on AIRSPY SDR#</Description>
+    <Title>SDR-RPC</Title>
+    <Authors>EnderIce2</Authors>
+    <Product>SDR# Discord RPC Plugin</Product>
+    <RepositoryType>git</RepositoryType>
+    <Version>$(VersionPrefix)</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\Debug\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SDRSharp.Common">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\SDRSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SDRSharp.PanView">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\SDRSharp.PanView.dll</HintPath>
+    </Reference>
+    <Reference Include="SDRSharp.Radio">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\SDRSharp.Radio.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>
