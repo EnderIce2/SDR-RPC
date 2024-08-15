@@ -1,0 +1,40 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Debug
+      run: dotnet build --configuration Debug
+    - name: Build Release
+      run: dotnet build --configuration Release
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Upload Artifact (Debug)
+      uses: actions/upload-artifact@v3
+      with:
+        name: SDR-RPC Debug
+        path: Debug\net8.0-windows
+    - name: Upload Artifact (Release)
+      uses: actions/upload-artifact@v3
+      with:
+        name: SDR-RPC Release
+        path: Release\net8.0-windows
